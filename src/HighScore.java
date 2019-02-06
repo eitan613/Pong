@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 
-public class highScore implements Serializable{
+public class HighScore implements Serializable{
 
     private int points;
     private ArrayList<Integer> highScores = new ArrayList<>(11);
@@ -10,7 +10,7 @@ public class highScore implements Serializable{
     private JFrame frame = new JFrame();
     private JTextArea displayForHighScores = new JTextArea();
 
-    public highScore(){
+    public HighScore(){
         for (int x = 0; x < 10; x++){
             highScores.add(0);
             highScoresInit.add("---");

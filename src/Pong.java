@@ -6,73 +6,53 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 
-public class Pong extends JFrame{
-    private Ball b;
-    private ComputerPaddle Cp;
-    private HumanPaddle hp;
+public class Pong{
+    private Ball ball;
+    private ComputerPaddle computerPaddle;
+    private HumanPaddle humanPaddle;
     private Timer ballTimer;
     private JButton playAgain = new JButton("Click here to play again.");
+    private JFrame frame = new JFrame("Pong");
+    private JPanel panel = new JPanel();
+    private JLabel status;
+    private HighScore highScore;
 
-    public static void main(String[] args) throws ClassNotFoundException {
+    public static void main(String[] args) {
         Pong pong = new Pong();
         pong.pong();
     }
-    public void pong() throws ClassNotFoundException {
-        this.setSize(500, 500);
-        add(BorderLayout.SOUTH,playAgain);
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        hp = new HumanPaddle();
-        addMouseMotionListener(new MouseMotionListener() {
-            @Override
-            public void mouseDragged(MouseEvent e) {}
 
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                int y = e.getY();
-                hp.move(y, getGraphics(), getBackground());
-            }
-        });
-        b = new Ball();
-        Cp = new ComputerPaddle(getWidth(), getHeight());
-        b.ball(getHeight());
-        JPanel statusBar = new JPanel();
-        highScore hs;
-        try {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("hs.obj"));
-            Object obj = ois.readObject();
-            ois.close();
-            hs = (highScore) obj;
-        } catch (IOException io) {
-            hs = new highScore();
-        }
-        JLabel status = new JLabel("You have " + hs.getPoints() + " points");
-        statusBar.add(status);
-        add(BorderLayout.NORTH, statusBar);
-        this.setVisible(true);
-        highScore Hs = hs;
+    private void pong(){
+        setPanel();
+        setFrame();
+        humanPaddle = new HumanPaddle(panel.getWidth(),panel.getHeight());
+        ball = new Ball();
+        computerPaddle = new ComputerPaddle(panel.getWidth(), panel.getHeight());
+        ball.ball(frame.getHeight());
+        frame.setVisible(true);
         playAgain.addActionListener(e -> {
-            b.setXCenter();
-            b.setYCenter();
-            status.setText("You have " + Hs.getPoints() + " points");
-            Hs.setHighScoreText(null);
+            ball.setXCenter();
+            ball.setYCenter();
+            status.setText("You have " + highScore.getPoints() + " points");
+            highScore.setHighScoreText(null);
             ballTimer.start();
         });
-            ballTimer = new Timer(100, e -> {
+        ballTimer = new Timer(100, e -> {
                 playAgain.setEnabled(false);
-                b.move(getGraphics(), getBackground());
-                Cp.move(b.getY(), getGraphics(), getBackground());
-                if (b.getX() == 50 && (b.getY() - 10 >= hp.getY() && b.getY() + 10 <= hp.getY() + 80)) {
-                    b.changeDirection();
-                    Hs.incrementPoints();
-                    status.setText("You have " + Hs.getPoints() + " points");
+                ball.move(panel.getGraphics(), panel.getBackground());
+                computerPaddle.move(ball.getY(), panel.getGraphics(), panel.getBackground());
+                if (ball.getX() == 50 && (ball.getY() - 10 >= humanPaddle.getY() && ball.getY() + 10 <= humanPaddle.getY() + 80)) {
+                    ball.changeDirection();
+                    highScore.incrementPoints();
+                    status.setText("You have " + highScore.getPoints() + " points");
                 }
-                if (b.getX() == getWidth() - 50)
-                    b.changeDirection();
-                if (b.getX() < -10) {
+                if (ball.getX() == frame.getWidth() - 50)
+                    ball.changeDirection();
+                if (ball.getX() < -10) {
                     try {
                         ballTimer.stop();
                         playAgain.setEnabled(true);
-                        Hs.endGame();
+                        highScore.endGame();
                         /**
                          * TODO have hs textArea added to this frame instead of new, with no button-joption pane instead
                          *  improve ball to speed up & change more than just xVelocity
@@ -85,10 +65,37 @@ public class Pong extends JFrame{
             });
             ballTimer.start();
     }
-    public void paint(Graphics g) {
-        super.paint(g);
-        hp.draw(g);
-        b.draw(g);
-        Cp.draw(g);
+
+    private void setPanel() {
+        panel.setSize(500,500);
+        panel.addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {}
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                humanPaddle.move(e.getY(), panel.getGraphics(), panel.getBackground());
+            }
+        });
+    }
+
+    private void setHighScore() {
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("hs.obj"));
+            Object obj = ois.readObject();
+            ois.close();
+            highScore = (HighScore) obj;
+        } catch (IOException io) {
+            highScore = new HighScore();
+        } catch (ClassNotFoundException ignored) {}
+    }
+
+    private void setFrame() {
+        frame.add(BorderLayout.CENTER,panel);
+      //  frame.add(BorderLayout.SOUTH,playAgain);
+        setHighScore();
+        status = new JLabel("You have " + highScore.getPoints() + " points");
+        //frame.add(BorderLayout.NORTH, status);
+        frame.setSize(panel.getWidth()+16,panel.getHeight()+37);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 }

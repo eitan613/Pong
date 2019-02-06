@@ -1,7 +1,10 @@
 import java.awt.*;
+import java.util.Random;
+
 public class Ball {
     private int x, y, height, velx, vely;
     private final int CENTER = 250;
+    private Random random = new Random();
 
     public void ball(int height){
         x = CENTER;
