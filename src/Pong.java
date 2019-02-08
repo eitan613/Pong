@@ -48,9 +48,6 @@ public class Pong{
                     ballTimer.stop();
                     playAgain.setEnabled(true);
                     highScore.endGame();
-                    /**
-                     * TODO have hs textArea added to this frame instead of new, with no button-joption pane instead
-                     */
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }

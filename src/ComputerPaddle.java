@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class ComputerPaddle implements Paddle {
+class ComputerPaddle {
     private int x, y;
     private final int WIDTH, HEIGHT;
 
@@ -11,14 +11,12 @@ public class ComputerPaddle implements Paddle {
         this.x = widthOfFrame - (widthOfFrame/12);
     }
 
-    @Override
-    public void draw(Graphics g) {
+    private void draw(Graphics g) {
         g.setColor(Color.BLACK);
         g.fillRect(x,y, WIDTH, HEIGHT);
     }
 
-    @Override
-    public void move(int yOfBall, Graphics g,Color c) {
+    void move(int yOfBall, Graphics g, Color c) {
         g.setColor(c);
         g.fillRect(x,y,WIDTH,HEIGHT);
         g.setColor(Color.black);
@@ -26,12 +24,7 @@ public class ComputerPaddle implements Paddle {
         draw(g);
     }
 
-    @Override
-    public int getY() {
-        return y;
-    }
-
-    public int getLeftEdge() {
+    int getLeftEdge() {
         return x;
     }
 }

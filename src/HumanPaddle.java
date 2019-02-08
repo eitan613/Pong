@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class HumanPaddle implements Paddle {
+class HumanPaddle {
     private int y, x;
     private final int WIDTH, HEIGHT, HEIGHT_OF_PANEL;
 
@@ -12,14 +12,12 @@ public class HumanPaddle implements Paddle {
         this.HEIGHT_OF_PANEL = heightOfFrame;
     }
 
-    @Override
-    public void draw(Graphics g) {
+    private void draw(Graphics g) {
         g.setColor(Color.BLACK);
         g.fillRect(x,y, WIDTH,HEIGHT);
     }
 
-    @Override
-    public void move(int yOfMouse, Graphics g, Color c) {
+    void move(int yOfMouse, Graphics g, Color c) {
         g.setColor(c);
         g.fillRect(x,y,WIDTH,HEIGHT);
         y = yOfMouse;
@@ -30,8 +28,8 @@ public class HumanPaddle implements Paddle {
         draw(g);
     }
 
-    @Override
-    public int getY() {
+
+    int getY() {
         return y;
     }
 
@@ -39,7 +37,7 @@ public class HumanPaddle implements Paddle {
         return x+WIDTH;
     }
 
-    public int getHeight() {
+    int getHeight() {
         return HEIGHT;
     }
 }

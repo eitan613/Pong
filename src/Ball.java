@@ -10,7 +10,7 @@ class Ball {
     Ball(int panelHeight, int humanPaddleHeight, int humanPaddleRightEdge, int computerPaddleLeftEdge){
         PANEL_CENTER = panelHeight/2;
         PANEL_HEIGHT = panelHeight;
-        xMovement =-15;
+        xMovement = 10;
         yMovement = 0;
         diameter = panelHeight / 25;
         radius = diameter /2;
@@ -35,11 +35,11 @@ class Ball {
             yMovement = -yMovement;
         boolean hitHumanPaddle = hitsHumanPaddle(humanPaddleY);
         if (hitHumanPaddle || hitComputerPaddle())
-            changeDirection();
+            changeDirection(hitHumanPaddle);
         draw(g,Color.BLACK);
         return hitHumanPaddle;
     }
-    private void changeDirection(){
+    private void changeDirection(boolean xHumanPaddle){
         xMovement = -xMovement;
         int randomX = random.nextInt(4);
         if (xMovement > 0)
@@ -53,6 +53,10 @@ class Ball {
             yMovement -= randomY;
         if (random.nextInt(3) == 1)
             yMovement = -yMovement;
+        if (xHumanPaddle)
+            ballCenter.setLocation(HUMAN_PADDLE_RIGHT_EDGE+radius,ballCenter.getY());
+        else
+            ballCenter.setLocation(COMPUTER_PADDLE_LEFT_EDGE-radius,ballCenter.getY());
     }
 
     int getCenter_Y(){
