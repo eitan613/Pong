@@ -18,11 +18,10 @@ public class Pong{
     private HighScore highScore;
 
     public static void main(String[] args) {
-        Pong pong = new Pong();
-        pong.pong();
+        new Pong();
     }
 
-    private void pong(){
+    private Pong(){
         setPanel();
         setFrame();
         humanPaddle = new HumanPaddle(panel.getWidth(),panel.getHeight());
@@ -30,10 +29,8 @@ public class Pong{
         ball = new Ball(panel.getHeight(),humanPaddle.getHeight(),humanPaddle.getRightEdge(),computerPaddle.getLeftEdge());
         frame.setVisible(true);
         playAgain.addActionListener(e -> {
-            ball.setCenter();
-            status.setText("You have " + highScore.getPoints() + " points");
-            highScore.setHighScoreText(null);
-            ballTimer.start();
+            frame.dispose();
+            new Pong();
         });
         ballTimer = new Timer(100, e -> {
             playAgain.setEnabled(false);
@@ -44,13 +41,9 @@ public class Pong{
                 status.setText("You have " + highScore.getPoints() + " points");
             }
             else if (ball.pastHumanPaddle(humanPaddle.getY())) {
-                try {
-                    ballTimer.stop();
-                    playAgain.setEnabled(true);
-                    highScore.endGame();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                ballTimer.stop();
+                playAgain.setEnabled(true);
+                highScore.endGame();
             }
         });
         ballTimer.start();
