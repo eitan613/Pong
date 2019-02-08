@@ -26,44 +26,37 @@ public class Pong{
         setPanel();
         setFrame();
         humanPaddle = new HumanPaddle(panel.getWidth(),panel.getHeight());
-        ball = new Ball();
         computerPaddle = new ComputerPaddle(panel.getWidth(), panel.getHeight());
-        ball.ball(frame.getHeight());
+        ball = new Ball(panel.getHeight(),humanPaddle.getHeight(),humanPaddle.getRightEdge(),computerPaddle.getLeftEdge());
         frame.setVisible(true);
         playAgain.addActionListener(e -> {
-            ball.setXCenter();
-            ball.setYCenter();
+            ball.setCenter();
             status.setText("You have " + highScore.getPoints() + " points");
             highScore.setHighScoreText(null);
             ballTimer.start();
         });
         ballTimer = new Timer(100, e -> {
-                playAgain.setEnabled(false);
-                ball.move(panel.getGraphics(), panel.getBackground());
-                computerPaddle.move(ball.getY(), panel.getGraphics(), panel.getBackground());
-                if (ball.getX() == 50 && (ball.getY() - 10 >= humanPaddle.getY() && ball.getY() + 10 <= humanPaddle.getY() + 80)) {
-                    ball.changeDirection();
-                    highScore.incrementPoints();
-                    status.setText("You have " + highScore.getPoints() + " points");
+            playAgain.setEnabled(false);
+            boolean hitHumanPaddle = ball.move(panel.getGraphics(), panel.getBackground(),humanPaddle.getY());
+            computerPaddle.move(ball.getCenter_Y(), panel.getGraphics(), panel.getBackground());
+            if (hitHumanPaddle) {
+                highScore.incrementPoints();
+                status.setText("You have " + highScore.getPoints() + " points");
+            }
+            else if (ball.pastHumanPaddle(humanPaddle.getY())) {
+                try {
+                    ballTimer.stop();
+                    playAgain.setEnabled(true);
+                    highScore.endGame();
+                    /**
+                     * TODO have hs textArea added to this frame instead of new, with no button-joption pane instead
+                     */
+                } catch (IOException e1) {
+                    e1.printStackTrace();
                 }
-                if (ball.getX() == frame.getWidth() - 50)
-                    ball.changeDirection();
-                if (ball.getX() < -10) {
-                    try {
-                        ballTimer.stop();
-                        playAgain.setEnabled(true);
-                        highScore.endGame();
-                        /**
-                         * TODO have hs textArea added to this frame instead of new, with no button-joption pane instead
-                         *  improve ball to speed up & change more than just xVelocity
-                         *  fix up code-better practices
-                         */
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            });
-            ballTimer.start();
+            }
+        });
+        ballTimer.start();
     }
 
     private void setPanel() {
@@ -91,11 +84,11 @@ public class Pong{
 
     private void setFrame() {
         frame.add(BorderLayout.CENTER,panel);
-      //  frame.add(BorderLayout.SOUTH,playAgain);
+        frame.add(BorderLayout.SOUTH,playAgain);
         setHighScore();
         status = new JLabel("You have " + highScore.getPoints() + " points");
-        //frame.add(BorderLayout.NORTH, status);
-        frame.setSize(panel.getWidth()+16,panel.getHeight()+37);
+        frame.add(BorderLayout.NORTH, status);
+        frame.setSize(panel.getWidth()+16,panel.getHeight()+80);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 }

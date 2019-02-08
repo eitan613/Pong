@@ -4,7 +4,7 @@ public class ComputerPaddle implements Paddle {
     private int x, y;
     private final int WIDTH, HEIGHT;
 
-    public ComputerPaddle(int widthOfFrame, int heightOfFrame) {
+    ComputerPaddle(int widthOfFrame, int heightOfFrame) {
         this.y = heightOfFrame/2;
         HEIGHT = heightOfFrame/6;
         WIDTH = widthOfFrame/25;
@@ -29,5 +29,9 @@ public class ComputerPaddle implements Paddle {
     @Override
     public int getY() {
         return y;
+    }
+
+    public int getLeftEdge() {
+        return x;
     }
 }
