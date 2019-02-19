@@ -11,17 +11,16 @@ class ComputerPaddle {
         this.x = widthOfFrame - (widthOfFrame/12);
     }
 
-    private void draw(Graphics g) {
-        g.setColor(Color.BLACK);
+    private void draw(Graphics g, Color color) {
+        g.setColor(color);
         g.fillRect(x,y, WIDTH, HEIGHT);
     }
 
     void move(int yOfBall, Graphics g, Color c) {
-        g.setColor(c);
-        g.fillRect(x,y,WIDTH,HEIGHT);
+        draw(g, c);
         g.setColor(Color.black);
         y = yOfBall-(HEIGHT/2);
-        draw(g);
+        draw(g,Color.black);
     }
 
     int getLeftEdge() {

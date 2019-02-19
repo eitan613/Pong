@@ -12,20 +12,19 @@ class HumanPaddle {
         this.HEIGHT_OF_PANEL = heightOfFrame;
     }
 
-    private void draw(Graphics g) {
-        g.setColor(Color.BLACK);
+    private void draw(Graphics g, Color color) {
+        g.setColor(color);
         g.fillRect(x,y, WIDTH,HEIGHT);
     }
 
     void move(int yOfMouse, Graphics g, Color c) {
-        g.setColor(c);
-        g.fillRect(x,y,WIDTH,HEIGHT);
+        draw(g,c);
         y = yOfMouse;
         if(y <  0)
             y = 0;
         else if((y+HEIGHT) > HEIGHT_OF_PANEL)
             y = HEIGHT_OF_PANEL -HEIGHT;
-        draw(g);
+        draw(g, Color.black);
     }
 
 
