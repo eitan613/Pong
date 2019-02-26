@@ -62,7 +62,7 @@ class Ball {
     int getCenter_Y(){
         return (int)ballCenter.getY();
     }
-    void setCenter(){ ballCenter.setLocation(PANEL_CENTER,PANEL_CENTER); }
+    private void setCenter(){ ballCenter.setLocation(PANEL_CENTER,PANEL_CENTER); }
 
     private boolean hitComputerPaddle() {
         return (ballCenter.getX()+radius >= COMPUTER_PADDLE_LEFT_EDGE && ((ballCenter.getX()+radius)-xMovement) <= COMPUTER_PADDLE_LEFT_EDGE);

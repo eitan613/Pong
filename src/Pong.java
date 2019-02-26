@@ -24,8 +24,8 @@ public class Pong{
     private Pong(){
         setPanel();
         setFrame();
-        humanPaddle = new HumanPaddle(panel.getWidth(),panel.getHeight());
         computerPaddle = new ComputerPaddle(panel.getWidth(), panel.getHeight());
+        humanPaddle = new HumanPaddle(panel.getWidth(),panel.getHeight());
         ball = new Ball(panel.getHeight(),humanPaddle.getHeight(),humanPaddle.getRightEdge(),computerPaddle.getLeftEdge());
         frame.setVisible(true);
         playAgain.addActionListener(e -> {
@@ -51,6 +51,16 @@ public class Pong{
 
     private void setPanel() {
         panel.setSize(500,500);
+        panel.setFocusable(true);
+        panel.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_DOWN)
+                    humanPaddle.move(humanPaddle.getY()+30,panel.getGraphics(),panel.getBackground());
+                else if (e.getKeyCode() == KeyEvent.VK_UP)
+                    humanPaddle.move(humanPaddle.getY()-30,panel.getGraphics(),panel.getBackground());
+            }
+        });
         panel.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {}
